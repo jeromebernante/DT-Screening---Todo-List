@@ -2,10 +2,8 @@ const taskInput = document.getElementById('taskInput');
 const addTaskButton = document.getElementById('addTaskButton');
 const taskContainer = document.getElementById('taskContainer');
 
-function addTask() {
-  const taskText = taskInput.value.trim();
-  if (taskText === '') return;
 
+function createTaskCard(taskText) {
   const taskCard = document.createElement('li');
   taskCard.classList.add('task-card');
 
@@ -19,15 +17,17 @@ function addTask() {
 
   taskCard.appendChild(taskCardText);
   taskCard.appendChild(deleteButton);
-  taskContainer.appendChild(taskCard);
 
-  taskInput.value = '';
+  addCardListeners(taskCard, taskCardText, deleteButton);
 
+  return taskCard;
+}
+
+function addCardListeners(taskCard, taskCardText, deleteButton) {
   taskCard.addEventListener('click', function (e) {
     if (e.target === deleteButton) return;
     taskCardText.classList.toggle('completed');
   });
-
 
   deleteButton.addEventListener('click', function () {
     taskContainer.removeChild(taskCard);
@@ -35,8 +35,18 @@ function addTask() {
 }
 
 
-addTaskButton.addEventListener('click', addTask);
+function addTask() {
+  const taskText = taskInput.value.trim();
+  if (taskText === '') return;
 
+  const taskCard = createTaskCard(taskText);
+  taskContainer.appendChild(taskCard);
+
+  taskInput.value = '';
+}
+
+
+addTaskButton.addEventListener('click', addTask);
 
 taskInput.addEventListener('keypress', function (e) {
   if (e.key === 'Enter') {
